@@ -1,0 +1,2269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='true' name='MSSmartTagsPreventParsing'/>
+<meta content='blogger' name='generator'/>
+<meta content='NIjx8Fe-C7cnr1UYoIEwCLo3C0m0SbnZkHIG4l9qLu8' name='google-site-verification'/>
+<link href='http://feeds2.feedburner.com/andrewbeacock' rel='alternate' title='Andrew Beacock"s Blog' type='application/atom+xml'/>
+<link href='http://www.blogger.com/feeds/11593374/posts/default' rel='service.post' title='Andrew Beacock"s Blog - Atom' type='application/atom+xml'/>
+<link href='http://www2.blogger.com/rsd.g?blogID=11593374' rel='EditURI' title='RSD' type='application/rsd+xml'/>
+<link href='http://files.andrewbeacock.com/images/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
+<link href='http://alexgorbatchev.com/pub/sh/current/styles/shCore.css' rel='stylesheet' type='text/css'/>
+<link href='http://alexgorbatchev.com/pub/sh/current/styles/shThemeEmacs.css' rel='stylesheet' type='text/css'/>
+<title>Andrew Beacock's Blog: How to add shared libraries to Linux's system library path</title>
+<link type='text/css' rel='stylesheet' href='http://www.blogger.com/static/v1/widgets/1492841994-widget_css_bundle.css' />
+<link type="text/css" rel="stylesheet" href="http://www.blogger.com/dyn-css/authorization.css?targetBlogID=11593374&zx=9a744efe-6193-43e9-b0c2-3ef989b5fc31"/>
+<style type="text/css">
+#navbar-iframe { display:block }
+</style>
+<style id='page-skin-1' type='text/css'><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Minima
+Designer: Douglas Bowman
+URL:      www.stopdesign.com
+Date:     26 Feb 2004
+Updated by: Blogger Team
+----------------------------------------------- */
+/* Variable definitions
+====================
+<Variable name="bgcolor" description="Page Background Color"
+type="color" default="#fff">
+<Variable name="textcolor" description="Text Color"
+type="color" default="#333">
+<Variable name="linkcolor" description="Link Color"
+type="color" default="#58a">
+<Variable name="pagetitlecolor" description="Blog Title Color"
+type="color" default="#666">
+<Variable name="descriptioncolor" description="Blog Description Color"
+type="color" default="#999">
+<Variable name="titlecolor" description="Post Title Color"
+type="color" default="#c60">
+<Variable name="bordercolor" description="Border Color"
+type="color" default="#ccc">
+<Variable name="sidebarcolor" description="Sidebar Title Color"
+type="color" default="#999">
+<Variable name="sidebartextcolor" description="Sidebar Text Color"
+type="color" default="#666">
+<Variable name="visitedlinkcolor" description="Visited Link Color"
+type="color" default="#999">
+<Variable name="bodyfont" description="Text Font"
+type="font" default="normal normal 100% Georgia, Serif">
+<Variable name="headerfont" description="Sidebar Title Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS',Trebuchet,Arial,Verdana,Sans-serif">
+<Variable name="pagetitlefont" description="Blog Title Font"
+type="font"
+default="normal normal 200% Georgia, Serif">
+<Variable name="descriptionfont" description="Blog Description Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif">
+<Variable name="postfooterfont" description="Post Footer Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif">
+*/
+/* Use this with templates/template-twocol.html */
+pre {
+background:#000000 none repeat scroll 0%;
+color:#63FF00;
+font-family:"bitstream vera sans mono",monaco,"lucida console","courier new",courier,serif;
+font-size:12px;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:normal;
+line-height:normal;
+margin:0.9em 0pt;
+overflow:auto;
+padding:8px;
+}
+#navbar-iframe {
+height: 0px;
+visibility: hidden;
+display: none;
+}
+body {
+background:#2A0038;
+margin:0;
+color:#333333;
+font:x-small Georgia Serif;
+font-size/* */:/**/small;
+font-size: /**/small;
+text-align: center;
+}
+a:link {
+color:#72179D;
+text-decoration:none;
+}
+a:visited {
+color:#72179D;
+text-decoration:none;
+}
+a:hover {
+color:#72179D;
+text-decoration:underline;
+}
+a img {
+border-width:0;
+}
+/* Header
+-----------------------------------------------
+*/
+#header-wrapper {
+width:750px;
+margin: 0 auto 10px;
+}
+#header {
+margin: 0px;
+text-align: center;
+color:#72179D;
+background: url(http://bp3.blogger.com/_Vu_eUOpUOMk/RgWd15V19VI/AAAAAAAAAHA/5wJ6y8haVbc/s400/business_card.gif) no-repeat;
+}
+#header h1 {
+margin:5px 5px 0;
+padding:15px 20px .25em;
+line-height:1.2em;
+font: normal bold 338% Trebuchet, Trebuchet MS, Arial, sans-serif;
+}
+#header a {
+color:#72179D;
+text-decoration:none;
+}
+#header a:hover {
+color:#72179D;
+}
+#header .description {
+margin:0 5px 5px;
+padding:0 20px 15px;
+max-width:700px;
+line-height: 1.4em;
+font: normal bold 111% Trebuchet, Trebuchet MS, Arial, sans-serif;
+color: #333333;
+}
+#header .description a {
+color: #333333;
+}
+#header .description a:hover {
+color: #72179D;
+}
+/* Outer-Wrapper
+----------------------------------------------- */
+#outer-wrapper {
+width: 750px;
+margin:0 auto;
+padding:10px;
+text-align:left;
+font: normal normal 100% Trebuchet, Trebuchet MS, Arial, sans-serif;
+background: white;
+}
+#main-wrapper {
+width: 500px;
+float: left;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+border-right: 1px dotted #cccccc;
+padding-right: 15px
+}
+#sidebar-wrapper {
+width: 220px;
+float: right;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;      /* fix for long non-text content breaking IE sidebar float */
+background: #eeeeee;
+font-size: 0.85em;
+}
+/* Headings
+----------------------------------------------- */
+h2 {
+margin:1.5em 0 .75em;
+font:normal bold 94% Trebuchet, Trebuchet MS, Arial, sans-serif;
+line-height: 1.4em;
+letter-spacing:0.1em;
+color:#2A0038;
+}
+/* Posts
+-----------------------------------------------
+*/
+h2.date-header {
+margin:1.5em 0 .5em;
+}
+.post {
+margin:.5em 0 1.5em;
+border-bottom:1px dotted #cccccc;
+padding-bottom:1.5em;
+}
+.post h3 {
+margin:.25em 0 0;
+padding:0 0 4px;
+font-size:140%;
+font-weight:normal;
+line-height:1.4em;
+color:#72179D;
+}
+.post h3 a, .post h3 a:visited, .post h3 strong {
+display:block;
+text-decoration:none;
+color:#72179D;
+font-weight:normal;
+}
+.post h3 strong, .post h3 a:hover {
+color:#333333;
+}
+.post p {
+margin:0 0 .75em;
+line-height:1.6em;
+}
+.post-footer {
+margin: .75em 0;
+color:#2A0038;
+font: normal normal 101% Trebuchet, Trebuchet MS, Arial, sans-serif;
+line-height: 1.4em;
+background: #eeeeee;
+}
+.comment-link {
+margin-left:.6em;
+}
+.post img {
+padding:4px;
+border:1px solid #cccccc;
+}
+.post blockquote {
+margin:1em 20px;
+padding: 5px;
+font-style: italic;
+background-color: #eeeeee;
+}
+.post blockquote p {
+margin:.75em 0;
+}
+/* Comments
+----------------------------------------------- */
+#comments h4 {
+margin:1em 0;
+font-weight: bold;
+line-height: 1.4em;
+letter-spacing:.2em;
+color: #2A0038;
+}
+#comments-block {
+margin:1em 0 1.5em;
+line-height:1.6em;
+}
+#comments-block .comment-author {
+margin:.5em 0;
+}
+#comments-block .comment-body {
+margin:.25em 0 0;
+}
+#comments-block .comment-footer {
+margin:-.25em 0 2em;
+line-height: 1.4em;
+letter-spacing:.1em;
+}
+#comments-block .comment-body p {
+margin:0 0 .75em;
+}
+.deleted-comment {
+font-style:italic;
+color:gray;
+}
+#blog-pager-newer-link {
+float: left;
+}
+#blog-pager-older-link {
+float: right;
+}
+#blog-pager {
+text-align: center;
+}
+.feed-links {
+clear: both;
+line-height: 2.5em;
+}
+/* Sidebar Content
+----------------------------------------------- */
+.sidebar {
+color: #333333;
+line-height: 1.5em;
+}
+.sidebar ul {
+list-style:none;
+margin:0 0 0;
+padding:0 0 0;
+}
+.sidebar li {
+margin:0;
+padding:0 0 .25em 15px;
+text-indent:-15px;
+line-height:1.5em;
+}
+.sidebar .widget, .main .widget {
+border-bottom:1px dotted #cccccc;
+margin:0 0 1.5em;
+padding:0 0 1.5em;
+}
+.main .Blog {
+border-bottom-width: 0;
+}
+/* Profile
+----------------------------------------------- */
+.profile-img {
+float: left;
+margin: 0 5px 5px 0;
+padding: 4px;
+border: 1px solid #cccccc;
+}
+.profile-data {
+margin:0;
+font: normal normal 101% Trebuchet, Trebuchet MS, Arial, sans-serif;
+color: #2A0038;
+font-weight: bold;
+line-height: 1.6em;
+}
+.profile-datablock {
+margin:.5em 0 .5em;
+}
+.profile-textblock {
+margin: 0.5em 0;
+line-height: 1.6em;
+}
+.profile-link {
+font: normal normal 101% Trebuchet, Trebuchet MS, Arial, sans-serif;
+letter-spacing: .1em;
+}
+/* Footer
+----------------------------------------------- */
+#footer {
+width:660px;
+clear:both;
+margin:0 auto;
+padding-top:15px;
+line-height: 1.6em;
+letter-spacing:.1em;
+text-align: center;
+}
+/** Page structure tweaks for layout editor wireframe */
+body#layout #header {
+margin-left: 0px;
+margin-right: 0px;
+}
+
+--></style>
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('headEnd');
+</script></head>
+<body>
+<div class='navbar section' id='navbar'><div class='widget Navbar' id='Navbar1'><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener("load",
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<iframe src="http://www.blogger.com/navbar.g?targetBlogID=11593374&amp;blogName=Andrew+Beacock&#39;s+Blog&amp;publishMode=PUBLISH_MODE_HOSTED&amp;navbarType=SILVER&amp;layoutType=LAYOUTS&amp;searchRoot=http://blog.andrewbeacock.com/search&amp;blogLocale=en_GB&amp;homepageUrl=http://blog.andrewbeacock.com/&amp;targetPostID=7312981725597770564&amp;vt=347484516062993349" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" height="30px" width="100%" id="navbar-iframe" allowtransparency="true" title="Blogger Navigation and Search"></iframe>
+<div></div></div></div>
+<div id='outer-wrapper'><div id='wrap2'>
+<!-- skip links for text browsers -->
+<span id='skiplinks' style='display:none;'>
+<a href='#main'>skip to main </a> |
+      <a href='#sidebar'>skip to sidebar</a>
+</span>
+<div id='header-wrapper'>
+<div class='header section' id='header'><div class='widget Header' id='Header1'>
+<div class='titlewrapper'>
+<h1 class='title'>
+<a href='http://blog.andrewbeacock.com/'>Andrew Beacock's Blog</a>
+</h1>
+</div>
+<div class='descriptionwrapper'>
+<p class='description'><span><a href="/search/label/Agile">agile</a> / <a href="/search/label/Apache">apache</a> / <a href="/search/label/Java">java</a> / <a href="/search/label/Leadership">leadership</a> / <a href="/search/label/Linux">linux</a> / <a href="/search/label/Mobile">mobile</a> / <a href="/search/label/Ruby">ruby</a> / <a href="/search/label/Subversion">subversion</a> / <a href="/search/label/Web">web</a></span></p>
+<p>
+<script type='text/javascript'>
+            <!--
+google_ad_client = "pub-8660867014864174";
+google_ad_host = "pub-1556223355139109";
+google_ad_host_channel="00000+00031+00032+00005";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "CC99CC";
+google_color_bg = "E7C6E8";
+google_color_link = "000000";
+google_color_url = "00008B";
+google_color_text = "663366";
+//-->
+</script>
+<script src='http://pagead2.googlesyndication.com/pagead/show_ads.js' type='text/javascript'>
+</script>
+<iframe border='0' frameborder='0' height='60' marginheight='0' marginwidth='0' scrolling='no' src='http://rcm-uk.amazon.co.uk/e/cm?t=andrewbeacock-21&o=2&p=42&l=ez&f=ifr&f=ifr' style='border:none;' width='234'></iframe>
+</p>
+</div>
+</div></div>
+</div>
+<div id='content-wrapper'>
+<div id='main-wrapper'>
+<div class='main section' id='main'><div class='widget Blog' id='Blog1'>
+<div class='blog-posts hfeed'>
+<!-- google_ad_section_start(name=default) -->
+
+          <div class="date-outer">
+        
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post'>
+<a name='7312981725597770564'></a>
+<h3 class='post-title'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html'>How to add shared libraries to Linux's system library path</a>
+</h3>
+<div class='post-header-line-1'></div>
+<div class='post-body'>
+<p>Sometimes in Linux when you install a new software package the instructions tell you to add a directory of shared libraries to your $LD_LIBRARY_PATH environment variable in your .bashrc.<br /><br />You may have noticed that if you then create a shortcut icon on your desktop to this application it won't start because it can't find the libraries.<br />A typical solution is to write a wrapper shell script to set the LD_LIBRARY_PATH and then call that application.<br /><br />Well, I've discovered how to add them to your system's library path allowing all environments to access them.  Note: There are differences between Debian and Ubuntu (the two flavours of Linux that I'm familiar with).<br /><br /><b>Ubuntu</b><br />Create a new file in <code>/etc/ld.so.conf.d/</code> called <code><APPLICATION>.conf</code><br /><br />Edit the file and add a line per directory of shared libraries (*.so files), it will look something like:<pre>/usr/lib/APPLICATION/lib</pre>Reload the list of system-wide library paths:<pre>sudo ldconfig</pre><b>Debian</b><br />Edit <code>/etc/ld.so.conf</code><br /><br />Add a line per directory of shared libraries (*.so files) to the bottom of the file, it will look something like:<pre>/usr/X11R6/lib<br />/usr/lib/APPLICATION/lib</pre>Reload the list of system-wide library paths:<br /><pre>ldconfig</pre>If you run your new application it should now work fine without you having to set any LD_LIBRARY_PATH environment variables.<br />If you still have problems you can obtain a list of the libraries that are on the system path by re-running the <code>ldconfig</code> command in verbose mode:<br /><pre>ldconfig -v</pre><br /><span class="technoratitag">Technorati Tags: <a href="http://www.technorati.com/tags/LD_LIBRARY_PATH" rel="tag">LD_LIBRARY_PATH</a>, <a href="http://www.technorati.com/tags/Ubuntu" rel="tag">Ubuntu</a>, <a href="http://www.technorati.com/tags/Debian" rel="tag">Debian</a>, <a href="http://www.technorati.com/tags/Linux" rel="tag">Linux</a>, <a href="http://www.technorati.com/tags/Andrew Beacock" rel="tag">Andrew Beacock</a></span></p>
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<p class='post-footer-line post-footer-line-1'><span class='post-timestamp'>
+Posted on
+<a class='timestamp-link' href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html' title='permanent link'>Saturday, October 20, 2007</a>
+</span>
+</p>
+<p class='post-footer-line post-footer-line-2'><span class='post-icons'>
+<span class='item-action'>
+<a href='http://www.blogger.com/email-post.g?blogID=11593374&postID=7312981725597770564' title='Email Post'>
+<span class='email-post-icon'>&#160;</span>
+</a>
+</span>
+<span class='item-control blog-admin pid-401133037'>
+<a href='http://www.blogger.com/post-edit.g?blogID=11593374&postID=7312981725597770564&from=pencil' title='Edit Post'>
+<img alt='' class='icon-action' height='18' src='http://img2.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<span class='post-backlinks post-comment-link'>
+</span>
+<span class='post-comment-link'>
+</span>
+</p>
+<p class='post-footer-line post-footer-line-3'><span class='post-labels'>
+Topics (Tags):
+<a href='http://blog.andrewbeacock.com/search/label/Linux' rel='tag'>Linux</a>
+</span>
+</p>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+<h4>
+10
+Comments:
+        
+</h4>
+<div id='Blog1_comments-block-wrapper'>
+<dl class='avatar-comment-indent' id='comments-block'>
+<dt class='comment-author ' id='c4280985110688720839'>
+<a name='c4280985110688720839'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="http://img1.blogblog.com/img/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-4280985110688720839'>
+<p>
+Hmmm, seems cool.<BR/><BR/>Joe joestain13@yahoo.com
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1193060700000#c4280985110688720839' title='comment permalink'>
+2:45 PM BST
+</a>
+<span class='item-control blog-admin pid-1351293570'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=4280985110688720839' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c389828553737127807'>
+<a name='c389828553737127807'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/09875475963587266268" rel="nofollow" onclick="" class="avatar-hovercard" id="av-1-09875475963587266268"><img src="http://img2.blogblog.com/img/b16-rounded.gif" width="16" height="16" alt="" title="Kasper">
+
+</a></span></div>
+<a href='http://www.blogger.com/profile/09875475963587266268' rel='nofollow'>Kasper</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-389828553737127807'>
+<p>
+Hi Andrew,<BR/><BR/>And now the other way around:<BR/>I want to run an application but without a specif library.  The application runs fine when I rename/remove the library.  But removing the library completely is to drastic for me.<BR/><BR/>Can I use ldconfig, ld.conf, etc. to do this?<BR/>If so, how?<BR/><BR/><BR/>Cheers,<BR/>Kasper
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1213354500000#c389828553737127807' title='comment permalink'>
+11:55 AM BST
+</a>
+<span class='item-control blog-admin pid-441555718'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=389828553737127807' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author blog-author' id='c1475891044760996408'>
+<a name='c1475891044760996408'></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/01039992884679308726" rel="nofollow" onclick="" class="avatar-hovercard" id="av-2-01039992884679308726"><img src="http://img1.blogblog.com/img/blank.gif" width="35" height="35" alt="" class="delayLoad" style="display: none;" longdesc="http://bp0.blogger.com/_Vu_eUOpUOMk/RgWamJV19TI/AAAAAAAAAGw/Lu_6ZKf-Glw/s400/buddy_icon.png" title="abeacock">
+
+<noscript><img src="http://bp0.blogger.com/_Vu_eUOpUOMk/RgWamJV19TI/AAAAAAAAAGw/Lu_6ZKf-Glw/s400/buddy_icon.png" width="35" height="35" class="photo" alt=""></noscript></a></span></div>
+<a href='http://www.blogger.com/profile/01039992884679308726' rel='nofollow'>abeacock</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-1475891044760996408'>
+<p>
+Kasper,<BR/>I'm sorry to say that I'm not sure how to solve your issue!  You can exclude whole directories from the LD_LIBRARY_PATH but no don't know of a way to exclude a particular one.<BR/><BR/>I think the rename option is probably the best so that you could always resurrect it if another application required it.<BR/><BR/>If you find a good solution please let me know!
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1213991760000#c1475891044760996408' title='comment permalink'>
+8:56 PM BST
+</a>
+<span class='item-control blog-admin pid-401133037'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=1475891044760996408' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c616523554324097191'>
+<a name='c616523554324097191'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="http://img1.blogblog.com/img/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-616523554324097191'>
+<p>
+Thank you for this post.<BR/><BR/>I was having problems using a 3rd party shared library and adding the .conf file with the correct directory worked!<BR/><BR/>(Using Ubuntu)
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1224962520000#c616523554324097191' title='comment permalink'>
+8:22 PM BST
+</a>
+<span class='item-control blog-admin pid-756693147'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=616523554324097191' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c1863059468926847001'>
+<a name='c1863059468926847001'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="http://img1.blogblog.com/img/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-1863059468926847001'>
+<p>
+The library path could be placed in any file, whose name ends with ".conf", inside /etc/ld.so.conf.d/.
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1226676840000#c1863059468926847001' title='comment permalink'>
+3:34 PM GMT
+</a>
+<span class='item-control blog-admin pid-1461178412'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=1863059468926847001' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c7226277286915787170'>
+<a name='c7226277286915787170'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/02812219960843491531" rel="nofollow" onclick="" class="avatar-hovercard" id="av-5-02812219960843491531"><img src="http://img2.blogblog.com/img/b16-rounded.gif" width="16" height="16" alt="" title="OneWorld">
+
+</a></span></div>
+<a href='http://www.blogger.com/profile/02812219960843491531' rel='nofollow'>OneWorld</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-7226277286915787170'>
+<p>
+Hi there, <BR/>My god I've been digging around for hours to run this application, I followed all the procedures above, but I don't understand where to make these changes as suggested in http://www.bcsoftnet.com/doc.htm <BR/><BR/>----<BR/>The Environmnet variable LD_LIBRARY_PATH must setup to the Oracle Library.<BR/>TNS_ADMIN and ORACLE_HOME variable also need to setup either one or both.<BR/><BR/>example for bash shell:<BR/>export ORACLE_HOME=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server<BR/>export LD_LIBRARY_PATH=$ORACLE_HOME/lib <BR/>----<BR/><BR/>Is it working for anyone, please guide me.<BR/><BR/>thanks,
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1231010520000#c7226277286915787170' title='comment permalink'>
+7:22 PM GMT
+</a>
+<span class='item-control blog-admin pid-1175240233'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=7226277286915787170' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author blog-author' id='c6268841916641599191'>
+<a name='c6268841916641599191'></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/01039992884679308726" rel="nofollow" onclick="" class="avatar-hovercard" id="av-6-01039992884679308726"><img src="http://img1.blogblog.com/img/blank.gif" width="35" height="35" alt="" class="delayLoad" style="display: none;" longdesc="http://bp0.blogger.com/_Vu_eUOpUOMk/RgWamJV19TI/AAAAAAAAAGw/Lu_6ZKf-Glw/s400/buddy_icon.png" title="abeacock">
+
+<noscript><img src="http://bp0.blogger.com/_Vu_eUOpUOMk/RgWamJV19TI/AAAAAAAAAGw/Lu_6ZKf-Glw/s400/buddy_icon.png" width="35" height="35" class="photo" alt=""></noscript></a></span></div>
+<a href='http://www.blogger.com/profile/01039992884679308726' rel='nofollow'>abeacock</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-6268841916641599191'>
+<p>
+OneWorld, Hi there glad you found my blog - I'm not linked with that Insite Developer software just looks like they liked my shared libraries article.<BR/><BR/>You see the lines starting "export ..." - they need to be added to the .bashrc or .profile file of the user that is trying to run them.  If you are trying to run it from a graphical desktop such as Gnome or KDE then you either need to follow my ideas above or write a little shell script to add the variables in first.<BR/><BR/>Good luck!
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1231101420000#c6268841916641599191' title='comment permalink'>
+8:37 PM GMT
+</a>
+<span class='item-control blog-admin pid-401133037'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=6268841916641599191' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c7646791606911680944'>
+<a name='c7646791606911680944'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="http://img1.blogblog.com/img/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-7646791606911680944'>
+<p>
+nice tip
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1255150973021#c7646791606911680944' title='comment permalink'>
+6:02 AM BST
+</a>
+<span class='item-control blog-admin pid-1692978051'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=7646791606911680944' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c7237864231390236499'>
+<a name='c7237864231390236499'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="http://img1.blogblog.com/img/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-7237864231390236499'>
+<p>
+This little tip saved me a world of hurt. Thank-you
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1290660628576#c7237864231390236499' title='comment permalink'>
+4:50 AM GMT
+</a>
+<span class='item-control blog-admin pid-1747793702'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=7237864231390236499' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c1893259241172303822'>
+<a name='c1893259241172303822'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/01452567330657364467" rel="nofollow" onclick="" class="avatar-hovercard" id="av-9-01452567330657364467"><img src="http://img2.blogblog.com/img/b16-rounded.gif" width="16" height="16" alt="" title="Kurniawan Junaidy">
+
+</a></span></div>
+<a href='http://www.blogger.com/profile/01452567330657364467' rel='nofollow'>Kurniawan Junaidy</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-1893259241172303822'>
+<p>
+Thank you.
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html?showComment=1320917987867#c1893259241172303822' title='comment permalink'>
+9:39 AM GMT
+</a>
+<span class='item-control blog-admin pid-434334611'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=11593374&postID=1893259241172303822' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+</dl>
+</div>
+<p class='comment-footer'>
+<a href='http://www.blogger.com/comment.g?blogID=11593374&postID=7312981725597770564' onclick=''>Post a Comment</a>
+</p>
+<div id='backlinks-container'>
+<div id='Blog1_backlinks-container'>
+<a name='links'></a><h4>
+</h4>
+<p class='comment-footer'>
+<a class='comment-link' href='' id='Blog1_backlinks-create-link' target='_blank'>
+</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+
+        </div></div>
+      
+<!-- google_ad_section_end -->
+</div>
+<div class='blog-pager' id='blog-pager'>
+<span id='blog-pager-newer-link'>
+<a class='blog-pager-newer-link' href='http://blog.andrewbeacock.com/2007/11/how-to-add-system-wide-environment.html' id='Blog1_blog-pager-newer-link' title='Newer Post'>Newer Post</a>
+</span>
+<span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='http://blog.andrewbeacock.com/2007/10/destructoids-team-fortress-2-for.html' id='Blog1_blog-pager-older-link' title='Older Post'>Older Post</a>
+</span>
+<a class='home-link' href='http://blog.andrewbeacock.com/'>Home</a>
+</div>
+<div class='clear'></div>
+<div class='post-feeds'>
+<div class='feed-links'>
+Subscribe to:
+<a class='feed-link' href='http://blog.andrewbeacock.com/feeds/7312981725597770564/comments/default' target='_blank' type='application/atom+xml'>Post Comments (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+<div id='sidebar-wrapper'>
+<div class='sidebar section' id='sidebar'><div class='widget Profile' id='Profile1'>
+<h2>About Me</h2>
+<div class='widget-content'>
+<a href='http://www.blogger.com/profile/01039992884679308726'><img alt='My Photo' class='profile-img' height='64' src='http://bp0.blogger.com/_Vu_eUOpUOMk/RgWamJV19TI/AAAAAAAAAGw/Lu_6ZKf-Glw/s400/buddy_icon.png' width='64'/></a>
+<dl class='profile-datablock'>
+<dt class='profile-data'>
+<a class='profile-name-link' href='http://www.blogger.com/profile/01039992884679308726' rel='author'>
+Andy B
+</a>
+</dt>
+<dd class='profile-data'>Ormskirk, Lancashire, United Kingdom</dd>
+</dl>
+<a class='profile-link' href='http://www.blogger.com/profile/01039992884679308726' rel='author'>View my complete profile</a>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=Profile&widgetId=Profile1&action=editWidget&sectionId=sidebar' onclick='return _WidgetManager._PopupConfig(document.getElementById("Profile1"));' target='configProfile1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div><div class='widget HTML' id='HTML1'>
+<h2 class='title'>Subscribe &amp; Support My Blog</h2>
+<div class='widget-content'>
+<a href="http://feeds2.feedburner.com/andrewbeacock" title="Subscribe via RSS"><img alt="" style="border:0; vertical-align: top;" src="http://photos1.blogger.com/blogger/4253/947/400/feed-icon-16x16.png"/></a>
+
+<a href="http://feeds2.feedburner.com/andrewbeacock" title="Subscribe via RSS"><img style="border:0; vertical-align: top;" alt="" src="http://www.feedburner.com/fb/images/pub/xml_button.gif"/></a>
+
+<a href="http://feeds2.feedburner.com/andrewbeacock" title="Subscribe via RSS"><img alt="" style="border:0; vertical-align: top;" src="http://photos1.blogger.com/blogger/4253/947/400/rss.gif"/></a>
+
+<a href="http://feeds2.feedburner.com/andrewbeacock"><img width="88" style="border:0" alt="" src="http://feeds2.feedburner.com/~fc/andrewbeacock?bg=&amp;fg=&amp;anim=" height="26"/></a>
+
+<form action="http://feedburner.google.com/fb/a/emailverify" target="popupwindow" method="post" onsubmit="window.open('http://feedburner.google.com', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+    Enter your email address<br/><input name="email" size="17" type="text"/>
+    <input value="http://feeds2.feedburner.com/~e?ffid=53222" name="url" type="hidden"/>
+    <input value="Andrew Beacock's Blog" name="title" type="hidden"/>
+    <input value="Go!" type="submit"/>
+</form>
+
+<ul>
+<li><a href="http://astore.amazon.co.uk/andrewbeacock-21/"><img src="http://4.bp.blogspot.com/_Vu_eUOpUOMk/RgWbR5V19UI/AAAAAAAAAG4/_XFBBKbxq3A/s400/amazon.gif"/> Buy Stuff From Amazon <br/>(and support my blog)</a></li>
+<li><a href="http://www.amazon.co.uk/exec/obidos/redirect?link_code=ur2&amp;tag=andrewbeacock-21&amp;camp=1634&amp;creative=6738&amp;path=http%3A%2F%2Fwww.amazon.co.uk%2Fgp%2Fregistry%2Fregistry.html%3Fid%3D3OGGH32BPQ6QI"><img src="http://4.bp.blogspot.com/_Vu_eUOpUOMk/RgWbR5V19UI/AAAAAAAAAG4/_XFBBKbxq3A/s400/amazon.gif"/> Buy Me A Present</a></li>
+</ul>
+
+<a href="http://www.linkedin.com/in/andrewbeacock"><img border="0" width="160" alt="View Andrew Beacock's profile on LinkedIn" src="http://www.linkedin.com/img/webpromo/btn_viewmy_160x33.gif" height="33"/></a>
+
+<a href="http://twitter.com/abeacock"><img src="http://lh6.ggpht.com/_Vu_eUOpUOMk/Sk4SzNjbHuI/AAAAAAAAAi4/5suxy6BCaDM/s144/twitter_logo.png"/></a>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=HTML&widgetId=HTML1&action=editWidget&sectionId=sidebar' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML1"));' target='configHTML1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget Label' id='Label1'>
+<h2>Topics (Tags)</h2>
+<div class='widget-content'>
+<b><a href='http://blog.andrewbeacock.com/search/label/Agile'>Agile</a></b>
+
+        (29),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Apache'>Apache</a></b>
+
+        (11),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Blog'>Blog</a></b>
+
+        (25),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/firefox'>firefox</a></b>
+
+        (3),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Gaming'>Gaming</a></b>
+
+        (5),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Guitar'>Guitar</a></b>
+
+        (4),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Java'>Java</a></b>
+
+        (66),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Leadership'>Leadership</a></b>
+
+        (1),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Linux'>Linux</a></b>
+
+        (58),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Mobile'>Mobile</a></b>
+
+        (3),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Ruby'>Ruby</a></b>
+
+        (22),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Shopping'>Shopping</a></b>
+
+        (8),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Spring'>Spring</a></b>
+
+        (15),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Subversion'>Subversion</a></b>
+
+        (13),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Thunderbird'>Thunderbird</a></b>
+
+        (5),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Trac'>Trac</a></b>
+
+        (3),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Web'>Web</a></b>
+
+        (58),
+    
+<b><a href='http://blog.andrewbeacock.com/search/label/Windows'>Windows</a></b>
+
+        (37),
+    
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=Label&widgetId=Label1&action=editWidget&sectionId=sidebar' onclick='return _WidgetManager._PopupConfig(document.getElementById("Label1"));' target='configLabel1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div><div class='widget BlogArchive' id='BlogArchive1'>
+<h2>Older Blog Posts</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive1_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2011-01-01T00:00:00Z&updated-max=2012-01-01T00:00:00Z&max-results=8'>2011</a>
+<span class='post-count' dir='ltr'>(8)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2011_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2011/10/do-is-boolean-mthods-work-in-jsps-with.html'>Do &#39;is&#39; boolean methods work in JSPs with JSTL?</a></li>
+<li><a href='http://blog.andrewbeacock.com/2011/10/how-to-stop-eclipse-reformating-your.html'>How to stop Eclipse reformating your Java enumerat...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2011_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2011/08/always-note-dns-server-settings-offline.html'>Always note DNS server settings offline</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2011_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2011/05/misleading-wiring-messages-with-aliased.html'>Misleading wiring messages with aliased Spring Dat...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2011/05/sound-advice-for-source-code-commit.html'>Sound advice for a source code commit frequency</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2011_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2011/03/using-comparing-enumerations-enums-with.html'>Using &amp; comparing enumerations (enums) with JSTL</a></li>
+<li><a href='http://blog.andrewbeacock.com/2011/03/keyboard-shortcut-for-paste-as-plain.html'>Keyboard shortcut for &#39;paste as plain text&#39; in Pid...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2011_02_01_archive.html'>February</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2011/02/embedding-google-docs-spreadsheet-in.html'>Embedding a Google Docs spreadsheet in Blogger</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2010-01-01T00:00:00Z&updated-max=2011-01-01T00:00:00Z&max-results=22'>2010</a>
+<span class='post-count' dir='ltr'>(22)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_11_01_archive.html'>November</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/11/how-to-use-matchmode-in-your.html'>How to use MatchMode in your JPA/Hibernate Restric...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/11/accessing-iterating-over-java-map-in.html'>Accessing &amp; iterating over a Java Map in a JSP pag...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/10/spring-autowiring-component-scanning_08.html'>Spring Autowiring &amp; Component Scanning Problems - ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/10/spring-autowiring-component-scanning.html'>Spring Autowiring &amp; Component Scanning Problems - ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_09_01_archive.html'>September</a>
+<span class='post-count' dir='ltr'>(5)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/09/spring-autowiring-component-scanning_30.html'>Spring Autowiring &amp; Component Scanning Problems - ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/09/spring-autowiring-component-scanning_20.html'>Spring Autowiring &amp; Component Scanning Problems - ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/09/spring-autowiring-component-scanning_16.html'>Spring Autowiring &amp; Component Scanning Problems - ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/09/spring-autowiring-component-scanning.html'>Spring Autowiring &amp; Component Scanning Problems - ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/09/something-new-for-my-blog.html'>Something new for my blog</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/08/have-more-than-one-gmail-account.html'>Have more than one gmail account?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_07_01_archive.html'>July</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/07/how-to-do-andor-type-sql-queries-using.html'>How to do AND/OR type SQL queries using Hibernate ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/07/iphone-version-of-excellent-password.html'>iPhone version of the excellent Password Composer</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/05/googlemail-is-going-gmail-returns-if.html'>googlemail is going, gmail returns (if you&#39;re in t...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_04_01_archive.html'>April</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/04/firebug-is-jquery-console-test-tool-too.html'>Firebug is a jQuery console test/debugging tool to...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/04/jquery-tip-selecting-ids-with-periods.html'>jQuery tip: Selecting ids with periods in them (do...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/04/good-tip-regarding-annotated-spring.html'>Great tip regarding annotated Spring form validati...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/03/summary-of-marchs-manchester-open.html'>Summary of March&#39;s Manchester Open Source Central ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/03/details-of-2nd-speaker-at-next-open.html'>Details of the 2nd speaker at the next Open Source...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_02_01_archive.html'>February</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/02/next-open-source-central-user-group.html'>Next Open Source Central User Group (Manchester) m...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2010_01_01_archive.html'>January</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2010/01/how-to-use-junction-if-you-want.html'>How to use Junction if you want Symbolic links in ...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/01/are-your-maven-profiles-being-picked-up.html'>Are your Maven profiles being picked up as &#39;defaul...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2010/01/cool-way-to-assert-lists-using-junit.html'>A cool way to assert Lists using JUnit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2009-01-01T00:00:00Z&updated-max=2010-01-01T00:00:00Z&max-results=39'>2009</a>
+<span class='post-count' dir='ltr'>(39)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_12_01_archive.html'>December</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2009/12/shorten-links-to-be-twitter-friendly.html'>Shorten links to be Twitter-friendly with j.mp</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/12/summary-of-decembers-manchester-spring.html'>Summary of December&#39;s Manchester Spring User Group...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_11_01_archive.html'>November</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2009/11/dont-miss-december-manchester-spring.html'>Don&#39;t miss the December Manchester Spring User Gro...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/11/paste-email-plus-perfect-for-multiple.html'>Paste Email Plus - perfect for multiple text snipp...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(4)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2009/10/javascript-splits-matches-with-regular.html'>JavaScript splits &amp; matches with regular expressio...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/10/how-to-disable-auto-completion-bell-in.html'>How to disable the auto-completion &#39;bell&#39; in Cygwi...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/10/how-to-get-scala-working-with-rxvt.html'>How to get Scala working with the RXVT terminal on...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/10/tommy-emmanuel-being-very-creative-with.html'>Tommy Emmanuel being VERY creative with an acousti...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_09_01_archive.html'>September</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2009/09/next-manchester-spring-user-group.html'>The next Manchester Spring User Group meetup is 13...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/09/use-pidgin-send-screenshots-with-this.html'>Use Pidgin? Send screenshots with this great new p...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/09/you-need-x-mini-ii-speaker-for-your-mp3.html'>You NEED an X-mini II speaker for your MP3 player ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2009/08/summary-of-augusts-manchester-spring.html'>Summary of August&#39;s Manchester Spring User Group M...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/08/dont-forget-next-manchester-spring-user.html'>Don&#39;t forget the next Manchester Spring User Group...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/08/installing-ubuntu-inside-windows-xp.html'>Installing Ubuntu inside Windows XP using VirtualB...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_07_01_archive.html'>July</a>
+<span class='post-count' dir='ltr'>(6)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2009/07/great-answer-to-what-is-agile-question.html'>A great answer to the &quot;What is Agile?&quot; question</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/07/better-java-dates-times-calendars-with.html'>Better Java Dates, Times &amp; Calendars with Joda-Tim...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/07/next-manchester-spring-user-group.html'>The next Manchester Spring User Group meetup is 11...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/07/supporting-oracle-xmltype-datatype-via.html'>Supporting the Oracle XMLTYPE datatype via JPA (Sp...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/07/mp3-purchase-comparison-between.html'>MP3 purchase comparison between Amazon.co.uk &amp; Pla...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2009/07/new-way-to-label-in-gmail-and-end-of.html'>A new way to label in GMail (and the end of Right-...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_06_01_archive.html'>June</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_04_01_archive.html'>April</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_02_01_archive.html'>February</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2009_01_01_archive.html'>January</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2008-01-01T00:00:00Z&updated-max=2009-01-01T00:00:00Z&max-results=38'>2008</a>
+<span class='post-count' dir='ltr'>(38)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_12_01_archive.html'>December</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_11_01_archive.html'>November</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_09_01_archive.html'>September</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_07_01_archive.html'>July</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_06_01_archive.html'>June</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_04_01_archive.html'>April</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_02_01_archive.html'>February</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2008_01_01_archive.html'>January</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>&#9660;&#160;</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2007-01-01T00:00:00Z&updated-max=2008-01-01T00:00:00Z&max-results=44'>2007</a>
+<span class='post-count' dir='ltr'>(44)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_12_01_archive.html'>December</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_11_01_archive.html'>November</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>&#9660;&#160;</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html'>How to add shared libraries to Linux&#39;s system libr...</a></li>
+<li><a href='http://blog.andrewbeacock.com/2007/10/destructoids-team-fortress-2-for.html'>DESTRUCTOID&#39;s Team Fortress 2 for Beginners</a></li>
+<li><a href='http://blog.andrewbeacock.com/2007/10/capistrano-recipe-for-restarting-apache.html'>A Capistrano recipe for restarting Apache 2 (on Li...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_09_01_archive.html'>September</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_07_01_archive.html'>July</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_06_01_archive.html'>June</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_04_01_archive.html'>April</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_02_01_archive.html'>February</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2007_01_01_archive.html'>January</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2006-01-01T00:00:00Z&updated-max=2007-01-01T00:00:00Z&max-results=39'>2006</a>
+<span class='post-count' dir='ltr'>(39)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_12_01_archive.html'>December</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_11_01_archive.html'>November</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_09_01_archive.html'>September</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_07_01_archive.html'>July</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_06_01_archive.html'>June</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_04_01_archive.html'>April</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_02_01_archive.html'>February</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2006_01_01_archive.html'>January</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/search?updated-min=2005-01-01T00:00:00Z&updated-max=2006-01-01T00:00:00Z&max-results=50'>2005</a>
+<span class='post-count' dir='ltr'>(52)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_12_01_archive.html'>December</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_11_01_archive.html'>November</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_10_01_archive.html'>October</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_09_01_archive.html'>September</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_08_01_archive.html'>August</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_07_01_archive.html'>July</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_06_01_archive.html'>June</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_05_01_archive.html'>May</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_04_01_archive.html'>April</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://blog.andrewbeacock.com/2005_03_01_archive.html'>March</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=BlogArchive&widgetId=BlogArchive1&action=editWidget&sectionId=sidebar' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' target='configBlogArchive1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div><div class='widget Followers' id='Followers1'>
+<h2 class='title'>Followers</h2>
+<div class='widget-content'>
+<div id='Followers1-wrapper'>
+<div style='margin-right:2px;'>
+<script type="text/javascript">
+        if (!window.google || !google.friendconnect) {
+          document.write('<script type="text/javascript"' +
+              'src="http://www.google.com/friendconnect/script/friendconnect.js">' +
+              '</scr' + 'ipt>');
+        }
+      </script>
+<script type="text/javascript">
+      if (!window.registeredBloggerCallbacks) {
+        window.registeredBloggerCallbacks = true;
+
+        
+
+        
+        gadgets.rpc.register('requestReload', function() {
+          document.location.reload();
+        });
+
+        
+        gadgets.rpc.register('requestSignOut', function(siteId) {
+          
+          google.friendconnect.container.openSocialSiteId = siteId;
+          google.friendconnect.requestSignOut();
+        });
+      }
+    </script>
+<script type="text/javascript">
+    
+    function registerGetBlogUrls() {
+      gadgets.rpc.register('getBlogUrls', function() {
+        var holder = {};
+        
+          
+            
+            
+              holder.currentPost = "http://www.blogger.com/feeds/11593374/posts/default/7312981725597770564";
+            
+            
+            
+              holder.currentComments = "http://www.blogger.com/feeds/11593374/7312981725597770564/comments/default";
+            
+            holder.currentPostUrl = "";
+            holder.currentPostId = 7312981725597770564
+          
+          
+          
+            holder.postFeed = "http://www.blogger.com/feeds/11593374/posts/default";
+          
+          
+          
+            holder.commentFeed = "http://www.blogger.com/feeds/11593374/comments/default";
+          
+          holder.currentBlogUrl = "http://blog.andrewbeacock.com/";
+          holder.currentBlogId = "11593374";
+        
+        return holder;
+      });
+    }
+  </script>
+<script type="text/javascript">
+  if (!window.registeredCommonBloggerCallbacks) {
+    window.registeredCommonBloggerCallbacks = true;
+
+    gadgets.rpc.register('resize_iframe', function(height) {
+      var el = document.getElementById(this['f']);
+      if (el) {
+        el.style.height = height + 'px';
+      }
+    });
+
+    
+    gadgets.rpc.register('set_pref', function() {});
+
+    registerGetBlogUrls();
+  }
+  </script>
+<div id="div-926re3cf2vkx" style="width: 100%; "></div>
+<script type="text/javascript">
+    var skin = {};
+    skin['FACE_SIZE'] = '32';
+    skin['HEIGHT'] = "260";
+    skin['TITLE'] = "Followers";
+    skin['BORDER_COLOR'] = "transparent";
+    skin['ENDCAP_BG_COLOR'] = "transparent";
+    skin['ENDCAP_TEXT_COLOR'] = "#333333";
+    skin['ENDCAP_LINK_COLOR'] = "#72179D";
+    skin['ALTERNATE_BG_COLOR'] = "transparent";
+    
+    skin['CONTENT_BG_COLOR'] = "transparent";
+    skin['CONTENT_LINK_COLOR'] = "#72179D";
+    skin['CONTENT_TEXT_COLOR'] = "#333333";
+    skin['CONTENT_SECONDARY_LINK_COLOR'] = "#72179D";
+    skin['CONTENT_SECONDARY_TEXT_COLOR'] = "#333333";
+    skin['CONTENT_HEADLINE_COLOR'] = "#72179D";
+    skin['FONT_FACE'] = "normal normal 100% Trebuchet, Trebuchet MS, Arial, sans-serif";
+    google.friendconnect.container.setParentUrl("/");
+    google.friendconnect.container["renderMembersGadget"](
+    {id: "div-926re3cf2vkx",
+     height: 260,
+     
+     
+     
+     site: "04937420475458420720",
+      
+     locale: 'en_GB' },
+     skin);
+  </script>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=Followers&widgetId=Followers1&action=editWidget&sectionId=sidebar' onclick='return _WidgetManager._PopupConfig(document.getElementById("Followers1"));' target='configFollowers1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+</div>
+<!-- spacer for skins that want sidebar and main to be the same height-->
+<div class='clear'>&#160;</div>
+</div>
+<!-- end content-wrapper -->
+<div id='footer-wrapper'>
+<div class='footer section' id='footer'><div class='widget Text' id='Text1'>
+<div class='widget-content'>
+Copyright (c) Andrew Beacock 2005 - 2011<br/><script src="%27http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js%27" type="'text/javascript'/"><br/>  <script src="'http://files.andrewbeacock.com/facebox/facebox.js'" type="'text/javascript'/"><br/>  <script type="'text/javascript'"><br/>    jQuery(document).ready(function($) {<br/>      $(&#39;a[rel*=facebox]&#39;).facebox({<br/>        loadingImage: &#39;http://files.andrewbeacock.com/facebox/loading.gif&#39;,<br/>        closeImage: &#39;http://files.andrewbeacock.com/facebox/closelabel.gif&#39;<br/>      })<br/>    })<br/>  </script><br/>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=Text&widgetId=Text1&action=editWidget&sectionId=footer' onclick='return _WidgetManager._PopupConfig(document.getElementById("Text1"));' target='configText1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget HTML' id='HTML2'>
+<h2 class='title'>Blog Statistics</h2>
+<div class='widget-content'>
+<a 
+target="_top" href="http://t.extreme-dm.com/?login=abeacock"><img border="0" width="41" src="http://t1.extreme-dm.com/i.gif" 
+name="EXim" height="38" 
+alt="eXTReMe Tracker" /></a>
+<script language="javascript1.2" type="text/javascript"><!--
+EXs=screen;EXw=EXs.width;navigator.appName!="Netscape"?
+EXb=EXs.colorDepth:EXb=EXs.pixelDepth;//-->
+</script><script type="text/javascript"><!--
+var EXlogin='abeacock' // Login
+var EXvsrv='s9' // VServer
+navigator.javaEnabled()==1?EXjv="y":EXjv="n";
+EXd=document;EXw?"":EXw="na";EXb?"":EXb="na";
+EXd.write("<img src=\"http://e0.extreme-dm.com",
+"/"+EXvsrv+".g?login="+EXlogin+"&amp;",
+"jv="+EXjv+"&amp;j=y&amp;srw="+EXw+"&amp;srb="+EXb+"&amp;",
+"l="+escape(EXd.referrer)+"\" height=1 width=1>");//-->
+</script><noscript><img width="1" alt="" height="1" 
+src="http://e0.extreme-dm.com/s9.g?login=abeacock&amp;amp;j=n&amp;amp;jv=n" />
+</noscript>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=11593374&widgetType=HTML&widgetId=HTML2&action=editWidget&sectionId=footer' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML2"));' target='configHTML2' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+</div>
+<!-- end outer-wrapper -->
+<!-- SyntaxHighlighter Stuff -->
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushBash.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushCss.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJava.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushSql.js' type='text/javascript'></script>
+<script src='http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js' type='text/javascript'></script>
+<!-- Reassign aliases -->
+<script type='text/javascript'>
+    SyntaxHighlighter.config.bloggerMode = true;
+    SyntaxHighlighter.defaults['gutter'] = false;
+    SyntaxHighlighter.defaults['wrap-lines'] = true;
+    SyntaxHighlighter.defaults['font-size'] = '80%';
+    SyntaxHighlighter.all();
+  </script>
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+</script><script type="text/javascript" src="http://www.blogger.com/static/v1/widgets/1947642054-widgets.js"></script>
+<script type='text/javascript'>
+if (typeof(BLOG_attachCsiOnload) != 'undefined' && BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV1";window['blogger_blog_id'] = '11593374';BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('http://www.blogger.com/rearrange?blogID\x3d11593374','http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html','11593374');
+_WidgetManager._SetPageActionUrl('http://www.blogger.com/display?blogID\x3d11593374','APq4FmCVVE_HeF3YCQsMhJaPAdMcFYmqFX7RejKrdZKFPthpSW_0vFc624Azt9FKEnUW0BVvR5usAG0maoTOjMQ_TryruH4t5A\x3d\x3d','AOuZoY5jZF9ON74Px1O30lrJZkOH50Uceg:1325015312938');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'title': 'Andrew Beacock\47s Blog', 'pageType': 'item', 'url': 'http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html', 'canonicalUrl': 'http://blog.andrewbeacock.com/2007/10/how-to-add-shared-libraries-to-linuxs.html', 'homepageUrl': 'http://blog.andrewbeacock.com/', 'blogspotFaviconUrl': 'http://blog.andrewbeacock.com/favicon.ico', 'enabledCommentProfileImages': true, 'searchLabel': '', 'searchQuery': '', 'pageName': 'How to add shared libraries to Linux\47s system library path', 'pageTitle': 'Andrew Beacock\47s Blog: How to add shared libraries to Linux\47s system library path', 'encoding': 'UTF-8', 'locale': 'en-GB', 'isPrivate': false, 'isMobile': false, 'mobileClass': '', 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Andrew Beacock\46#39;s Blog - Atom\42 href\75\42http://blog.andrewbeacock.com/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42Andrew Beacock\46#39;s Blog - RSS\42 href\75\42http://blog.andrewbeacock.com/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42Andrew Beacock\46#39;s Blog - Atom\42 href\75\42http://www.blogger.com/feeds/11593374/posts/default\42 /\76\n\74link rel\75\42EditURI\42 type\75\42application/rsd+xml\42 title\75\42RSD\42 href\75\42http://www.blogger.com/rsd.g?blogID\07511593374\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Andrew Beacock\46#39;s Blog - Atom\42 href\75\42http://blog.andrewbeacock.com/feeds/7312981725597770564/comments/default\42 /\76\n', 'meTag': '', 'openIdOpTag': '', 'imageSrcTag': '', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var a\75window;function c(b){this.t\75{};this.tick\75function(b,i,d){d\75void 0!\75d?d:(new Date).getTime();this.t[b]\75[d,i]};this.tick(\42start\42,null,b)}var f\75new c;a.jstiming\75{Timer:c,load:f};try{var g\75null;a.chrome\46\46a.chrome.csi\46\46(g\75Math.floor(a.chrome.csi().pageT));null\75\75g\46\46a.gtbExternal\46\46(g\75a.gtbExternal.pageT());null\75\75g\46\46a.external\46\46(g\75a.external.pageT);g\46\46(a.jstiming.pt\75g)}catch(h){};a.tickAboveFold\75function(b){var e\0750;if(b.offsetParent){do e+\75b.offsetTop;while(b\75b.offsetParent)}b\75e;750\76\75b\46\46a.jstiming.load.tick(\42aft\42)};var j\75!1;function k(){j||(j\75!0,a.jstiming.load.tick(\42firstScrollTime\42))}a.addEventListener?a.addEventListener(\42scroll\42,k,!1):a.attachEvent(\42onscroll\42,k);\n })();\74/script\076', 'mobileHeadScript': '', 'analyticsAccountNumber': ''}}]);
+_WidgetManager._RegisterWidget('_TextView', new _WidgetInfo('Text1', 'footer', null, document.getElementById('Text1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'footer', null, document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ProfileView', new _WidgetInfo('Profile1', 'sidebar', null, document.getElementById('Profile1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'sidebar', null, document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LabelView', new _WidgetInfo('Label1', 'sidebar', null, document.getElementById('Label1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar', null, document.getElementById('BlogArchive1'), {'languageDirection': 'ltr'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_FollowersView', new _WidgetInfo('Followers1', 'sidebar', null, document.getElementById('Followers1'), {'title': 'Followers', 'codeSnippet': '\74script type\75\42text/javascript\42\76\n        if (!window.google || !google.friendconnect) {\n          document.write(\47\74script type\75\42text/javascript\42\47 +\n              \47src\75\42http://www.google.com/friendconnect/script/friendconnect.js\42\76\47 +\n              \47\74/scr\47 + \47ipt\76\47);\n        }\n      \74/script\76\n\74script type\75\42text/javascript\42\76\n      if (!window.registeredBloggerCallbacks) {\n        window.registeredBloggerCallbacks \75 true;\n\n        \n\n        \n        gadgets.rpc.register(\47requestReload\47, function() {\n          document.location.reload();\n        });\n\n        \n        gadgets.rpc.register(\47requestSignOut\47, function(siteId) {\n          \n          google.friendconnect.container.openSocialSiteId \75 siteId;\n          google.friendconnect.requestSignOut();\n        });\n      }\n    \74/script\76\n\74script type\75\42text/javascript\42\76\n    \n    function registerGetBlogUrls() {\n      gadgets.rpc.register(\47getBlogUrls\47, function() {\n        var holder \75 {};\n        \n          \n            \n            \n              holder.currentPost \75 \42http://www.blogger.com/feeds/11593374/posts/default/7312981725597770564\42;\n            \n            \n            \n              holder.currentComments \75 \42http://www.blogger.com/feeds/11593374/7312981725597770564/comments/default\42;\n            \n            holder.currentPostUrl \75 \42\42;\n            holder.currentPostId \75 7312981725597770564\n          \n          \n          \n            holder.postFeed \75 \42http://www.blogger.com/feeds/11593374/posts/default\42;\n          \n          \n          \n            holder.commentFeed \75 \42http://www.blogger.com/feeds/11593374/comments/default\42;\n          \n          holder.currentBlogUrl \75 \42http://blog.andrewbeacock.com/\42;\n          holder.currentBlogId \75 \04211593374\42;\n        \n        return holder;\n      });\n    }\n  \74/script\76\n\74script type\75\42text/javascript\42\76\n  if (!window.registeredCommonBloggerCallbacks) {\n    window.registeredCommonBloggerCallbacks \75 true;\n\n    gadgets.rpc.register(\47resize_iframe\47, function(height) {\n      var el \75 document.getElementById(this[\47f\47]);\n      if (el) {\n        el.style.height \75 height + \47px\47;\n      }\n    });\n\n    \n    gadgets.rpc.register(\47set_pref\47, function() {});\n\n    registerGetBlogUrls();\n  }\n  \74/script\76\n\74div id\75\42div-3q7phlk6txp0\42 style\75\42width: 100%; \42\76\74/div\76\n\74script type\75\42text/javascript\42\76\n    var skin \75 {};\n    skin[\47FACE_SIZE\47] \75 \04732\47;\n    skin[\47HEIGHT\47] \75 \042260\42;\n    skin[\47TITLE\47] \75 \42Followers\42;\n    skin[\47BORDER_COLOR\47] \75 \42transparent\42;\n    skin[\47ENDCAP_BG_COLOR\47] \75 \42transparent\42;\n    skin[\47ENDCAP_TEXT_COLOR\47] \75 \42#333333\42;\n    skin[\47ENDCAP_LINK_COLOR\47] \75 \42#72179D\42;\n    skin[\47ALTERNATE_BG_COLOR\47] \75 \42transparent\42;\n    \n    skin[\47CONTENT_BG_COLOR\47] \75 \42transparent\42;\n    skin[\47CONTENT_LINK_COLOR\47] \75 \42#72179D\42;\n    skin[\47CONTENT_TEXT_COLOR\47] \75 \42#333333\42;\n    skin[\47CONTENT_SECONDARY_LINK_COLOR\47] \75 \42#72179D\42;\n    skin[\47CONTENT_SECONDARY_TEXT_COLOR\47] \75 \42#333333\42;\n    skin[\47CONTENT_HEADLINE_COLOR\47] \75 \42#72179D\42;\n    skin[\47FONT_FACE\47] \75 \42normal normal 100% Trebuchet, Trebuchet MS, Arial, sans-serif\42;\n    google.friendconnect.container.setParentUrl(\42/\42);\n    google.friendconnect.container[\42renderMembersGadget\42](\n    {id: \42div-3q7phlk6txp0\42,\n     height: 260,\n     \n     \n     \n     site: \04204937420475458420720\42,\n      \n     locale: \47en_GB\47 },\n     skin);\n  \74/script\076'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header'));
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'showBacklinks': true, 'postId': '7312981725597770564', 'lightboxEnabled': true, 'lightboxModuleUrl': 'http://www.blogger.com/static/v1/jsbin/702092122-lbx_en-GB.js', 'lightboxCssUrl': 'http://www.blogger.com/static/v1/v-css/2985960345-lightbox_bundle.css'}, 'displayModeFull'));
+</script>
+</body>
+</html>

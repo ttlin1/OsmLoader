@@ -1,0 +1,1 @@
+link /etc/ld.so.conf.d

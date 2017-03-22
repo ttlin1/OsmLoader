@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<translations>
+  <translation>
+    <name>Eliminate unused tags</name>
+    <description>Remove every tag that's not in a list</description>
+    <match mode="or">
+      <match type="node">
+        <tag k="exit_to|highway|motorway_junction|ref"  v=".*"/>
+      </match>
+      <match type="way">
+        <tag k="access|aerialway|alt_name|bridge|bus|construction|highway|junction|layer|maxspeed|name|name_1|oneway|oneway:bus|oneway:psv|psv|ref|railway|surface|trimet:auxiliary|tunnel" v=".*"/>
+      </match>
+      <match type="relation">
+        <tag k="except|name|network|operator|restriction|ref|route|type" v=".*"/>
+      </match>
+    </match>
+    <output>
+      <copy-matched/>
+    </output>
+  </translation>
+</translations>

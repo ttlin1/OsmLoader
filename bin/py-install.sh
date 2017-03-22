@@ -1,0 +1,1 @@
+link /home/geoserve/install/py-install.sh
